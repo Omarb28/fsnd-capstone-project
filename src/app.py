@@ -5,8 +5,8 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from sqlalchemy import exc
 
-from .database.models import setup_db, Actor, Movie
-from .auth.auth import requires_auth, AuthError
+from database.models import setup_db, Actor, Movie
+from auth.auth import requires_auth, AuthError
 
 
 def create_app(test_config=None):
@@ -15,7 +15,6 @@ def create_app(test_config=None):
     CORS(app)
     db = setup_db(app)
     migrate = Migrate(app, db)
-
 
     '''
     Actor Endpoints
@@ -28,7 +27,11 @@ def create_app(test_config=None):
             actors = Actor.query.all()
             formatted_actors = [actor.format() for actor in actors]
 
-            return jsonify(formatted_actors)
+            return jsonify({
+                "success": True,
+                "status_code": 200,
+                "actors": formatted_actors
+            })
         except exc.SQLAlchemyError:
             abort(400)
 
@@ -47,8 +50,6 @@ def create_app(test_config=None):
         try:
             actor = Actor(name=name, age=age, gender=gender)
             actor.insert()
-
-            print(jwt)
 
             return jsonify({
                 "success": True,
@@ -129,7 +130,6 @@ def create_app(test_config=None):
         except exc.SQLAlchemyError:
             abort(400)
 
-
     '''
     Movie Endpoints
     '''
@@ -141,7 +141,11 @@ def create_app(test_config=None):
             movies = Movie.query.all()
             formatted_movies = [movie.format() for movie in movies]
 
-            return jsonify(formatted_movies)
+            return jsonify({
+                "success": True,
+                "status_code": 200,
+                "movies": formatted_movies
+            })
         except exc.SQLAlchemyError:
             abort(400)
 
@@ -236,7 +240,6 @@ def create_app(test_config=None):
         except exc.SQLAlchemyError:
             abort(400)
 
-
     '''
     Error Handling
     '''
@@ -289,7 +292,7 @@ def create_app(test_config=None):
             "message": "Unprocessable Entity",
             'description': error.description
         }), 422
-    
+
     # Internal Server Error
     @app.errorhandler(500)
     def internal_server_error(error):
@@ -299,7 +302,7 @@ def create_app(test_config=None):
             'message': 'Internal Server Error',
             'description': error.description
         }), 500
-    
+
     # Authentication and Authorization Errors
     @app.errorhandler(AuthError)
     def auth_error_handler(error):
@@ -326,7 +329,6 @@ def create_app(test_config=None):
             "code": error_code
         }), status_code
 
-
     return app
 
 
@@ -334,5 +336,3 @@ APP = create_app()
 
 if __name__ == '__main__':
     APP.run(host='0.0.0.0', port=8080, debug=True)
-
-
