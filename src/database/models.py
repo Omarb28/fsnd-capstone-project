@@ -30,9 +30,9 @@ class Actor(db.Model):
     __tablename__ = 'Actor'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    age = Column(Integer)
-    gender = Column(String)  # TODO: Restrict column to male and female
+    name = Column(String(100), nullable=False)
+    age = Column(Integer, nullable=False)
+    gender = Column(String(20), nullable=False)
 
     def __init__(self, name, age, gender):
         self.name = name
@@ -70,8 +70,8 @@ class Movie(db.Model):
     __tablename__ = 'Movie'
 
     id = Column(Integer, primary_key=True)
-    title = Column(String)
-    release_year = Column(Integer)
+    title = Column(String(100), nullable=False)
+    release_year = Column(Integer, nullable=False)
 
     def __init__(self, title, release_year):
         self.title = title
