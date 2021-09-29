@@ -34,7 +34,8 @@ def create_app(test_config=None):
 
     # Create Actor
     @app.route('/actors', methods=['POST'])
-    def create_actor():
+    @requires_auth('post:actors')
+    def create_actor(jwt):
         body = request.get_json()
 
         name = body.get('name')
@@ -47,6 +48,8 @@ def create_app(test_config=None):
             actor = Actor(name=name, age=age, gender=gender)
             actor.insert()
 
+            print(jwt)
+
             return jsonify({
                 "success": True,
                 "status_code": 200,
@@ -57,7 +60,8 @@ def create_app(test_config=None):
 
     # Retrive Actor
     @app.route('/actors/<int:actor_id>', methods=['GET'])
-    def retrive_actor(actor_id):
+    @requires_auth('get:actors')
+    def retrive_actor(jwt, actor_id):
         try:
             actor = Actor.query.get(actor_id)
 
@@ -74,7 +78,8 @@ def create_app(test_config=None):
 
     # Update Actor
     @app.route('/actors/<int:actor_id>', methods=['PATCH'])
-    def update_actor(actor_id):
+    @requires_auth('patch:actors')
+    def update_actor(jwt, actor_id):
         try:
             actor = Actor.query.get(actor_id)
 
@@ -107,7 +112,8 @@ def create_app(test_config=None):
 
     # Delete Actor
     @app.route('/actors/<int:actor_id>', methods=['DELETE'])
-    def delete_actor(actor_id):
+    @requires_auth('delete:actors')
+    def delete_actor(jwt, actor_id):
         try:
             actor = Actor.query.get(actor_id)
 
@@ -130,7 +136,7 @@ def create_app(test_config=None):
     # Retrieve Movie List
     @app.route('/movies')
     @requires_auth('get:movies')
-    def retrieve_movies_list():
+    def retrieve_movies_list(jwt):
         try:
             movies = Movie.query.all()
             formatted_movies = [movie.format() for movie in movies]
@@ -141,7 +147,8 @@ def create_app(test_config=None):
 
     # Create Movie
     @app.route('/movies', methods=['POST'])
-    def create_movie():
+    @requires_auth('post:movies')
+    def create_movie(jwt):
         body = request.get_json()
 
         title = body.get('title')
@@ -163,7 +170,8 @@ def create_app(test_config=None):
 
     # Retrieve Movie
     @app.route('/movies/<int:movie_id>', methods=['GET'])
-    def retrive_movie(movie_id):
+    @requires_auth('get:movies')
+    def retrive_movie(jwt, movie_id):
         try:
             movie = Movie.query.get(movie_id)
 
@@ -180,7 +188,8 @@ def create_app(test_config=None):
 
     # Update Movie
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
-    def update_movie(movie_id):
+    @requires_auth('patch:movies')
+    def update_movie(jwt, movie_id):
         try:
             movie = Movie.query.get(movie_id)
 
@@ -210,7 +219,8 @@ def create_app(test_config=None):
 
     # Delete Movie
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
-    def delete_movie(movie_id):
+    @requires_auth('delete:movies')
+    def delete_movie(jwt, movie_id):
         try:
             movie = Movie.query.get(movie_id)
 
