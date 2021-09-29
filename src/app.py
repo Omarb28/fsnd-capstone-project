@@ -45,7 +45,19 @@ def create_app(test_config=None):
         age = body.get('age')
         gender = body.get('gender')
 
-        # TODO: Add checks for validity of input
+        if (
+            type(name) is not str
+            or type(age) is not int
+            or type(gender) is not str
+        ):
+            abort(400)
+        
+        if (
+            name == ''
+            or age <= 0
+            or (gender != 'Male' and gender != 'Female')
+        ):
+            abort(422)
 
         try:
             actor = Actor(name=name, age=age, gender=gender)
@@ -92,13 +104,28 @@ def create_app(test_config=None):
             age = body.get('age')
             gender = body.get('gender')
 
-            # TODO: Add checks for validity of input
-
             if name is not None:
+                if type(name) is not str:
+                    abort(400)
+                if name == '':
+                    abort(422)
+                
                 actor.name = name
+
             if age is not None:
+                if type(age) is not int:
+                    abort(400)
+                if age <= 0:
+                    abort(422)
+
                 actor.age = age
+
             if gender is not None:
+                if type(gender) is not str:
+                    abort(400)
+                if gender != 'Male' and gender != 'Female':
+                    abort(422)
+
                 actor.gender = gender
 
             actor.update()
@@ -158,7 +185,17 @@ def create_app(test_config=None):
         title = body.get('title')
         release_year = body.get('release_year')
 
-        # TODO: Add checks for validity of input
+        if (
+            type(title) is not str
+            or type(release_year) is not int
+        ):
+            abort(400)
+        
+        if (
+            title == ''
+            or release_year <= 0
+        ):
+            abort(422)
 
         try:
             movie = Movie(title=title, release_year=release_year)
@@ -204,11 +241,20 @@ def create_app(test_config=None):
             title = body.get('title')
             release_year = body.get('release_year')
 
-            # TODO: Add checks for validity of input
-
             if title is not None:
+                if type(title) is not str:
+                    abort(400)
+                if title == '':
+                    abort(422)
+                
                 movie.title = title
+
             if release_year is not None:
+                if type(release_year) is not int:
+                    abort(400)
+                if release_year <= 0:
+                    abort(422)
+
                 movie.release_year = release_year
 
             movie.update()
