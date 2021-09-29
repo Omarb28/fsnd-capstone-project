@@ -4,7 +4,7 @@ from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
 from sqlalchemy import exc
-from models import setup_db, Actor, Movie
+from .database.models import setup_db, Actor, Movie
 
 
 def create_app(test_config=None):
@@ -90,7 +90,7 @@ def create_app(test_config=None):
                 actor.age = age
             if gender is not None:
                 actor.gender = gender
-            
+
             actor.update()
 
             return jsonify({
@@ -171,7 +171,7 @@ def create_app(test_config=None):
             })
         except exc.SQLAlchemyError:
             abort(400)
-    
+
     # Update Movie
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
     def update_movie(movie_id):
@@ -191,7 +191,7 @@ def create_app(test_config=None):
                 movie.title = title
             if release_year is not None:
                 movie.release_year = release_year
-            
+
             movie.update()
 
             return jsonify({
