@@ -51,7 +51,7 @@ def create_app(test_config=None):
             or type(gender) is not str
         ):
             abort(400)
-        
+
         if (
             name == ''
             or age <= 0
@@ -109,7 +109,7 @@ def create_app(test_config=None):
                     abort(400)
                 if name == '':
                     abort(422)
-                
+
                 actor.name = name
 
             if age is not None:
@@ -190,7 +190,7 @@ def create_app(test_config=None):
             or type(release_year) is not int
         ):
             abort(400)
-        
+
         if (
             title == ''
             or release_year <= 0
@@ -246,7 +246,7 @@ def create_app(test_config=None):
                     abort(400)
                 if title == '':
                     abort(422)
-                
+
                 movie.title = title
 
             if release_year is not None:

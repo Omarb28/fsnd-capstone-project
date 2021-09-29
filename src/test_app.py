@@ -38,11 +38,16 @@ class CastingAgencyTestCase(unittest.TestCase):
             ]
 
             for actor in self.actors_list:
-                actor_row = Actor(name=actor['name'], age=actor['age'], gender=actor['gender'])
+                actor_row = Actor(
+                    name=actor['name'],
+                    age=actor['age'],
+                    gender=actor['gender'])
                 actor_row.insert()
 
             for movie in self.movies_list:
-                movie_row = Movie(title=movie['title'], release_year=movie['release_year'])
+                movie_row = Movie(
+                    title=movie['title'],
+                    release_year=movie['release_year'])
                 movie_row.insert()
 
         # variables to use in the tests
@@ -76,9 +81,15 @@ class CastingAgencyTestCase(unittest.TestCase):
         }
 
         self.token_auth = {
-            'casting_assistant_auth':   {'Authorization': 'Bearer ' + os.environ['CASTING_ASSISTANT_TOKEN']},
-            'casting_director_auth':    {'Authorization': 'Bearer ' + os.environ['CASTING_DIRECTOR_TOKEN']},
-            'executive_producer_auth':  {'Authorization': 'Bearer ' + os.environ['EXECUTIVE_PRODUCER_TOKEN']}
+            'casting_assistant_auth':
+                {'Authorization': 'Bearer '
+                    + os.environ['CASTING_ASSISTANT_TOKEN']},
+            'casting_director_auth':
+                {'Authorization': 'Bearer '
+                    + os.environ['CASTING_DIRECTOR_TOKEN']},
+            'executive_producer_auth':
+                {'Authorization': 'Bearer '
+                    + os.environ['EXECUTIVE_PRODUCER_TOKEN']}
         }
 
         self.default_token_auth = self.token_auth['executive_producer_auth']
@@ -95,7 +106,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_get_list_of_actors(self):
         res = self.client().get(
-            '/actors', 
+            '/actors',
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
@@ -105,54 +116,54 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_get_actor_information(self):
         res = self.client().get(
-            '/actors/1', 
+            '/actors/1',
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['actor'])
-    
+
     def test_404_actor_not_found(self):
         res = self.client().get(
-            '/actors/99999', 
+            '/actors/99999',
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Not Found')
-    
+
     # Post Actor
 
     def test_create_new_actor(self):
         res = self.client().post(
             '/actors',
-            json=self.actor_test, 
+            json=self.actor_test,
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['created_id'])
-    
+
     def test_400_bad_request_create_new_actor_with_missing_attributes(self):
         res = self.client().post(
             '/actors',
-            json=self.actor_with_missing_attributes, 
+            json=self.actor_with_missing_attributes,
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
         self.assertEqual(res.status_code, 400)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Bad Request')
-    
+
     # Patch Actor
 
     def test_update_actor_information(self):
         res = self.client().patch(
             '/actors/1',
-            json=self.actor_test, 
+            json=self.actor_test,
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
@@ -160,11 +171,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['actor'])
         self.assertEqual(data['actor']['name'], self.actor_test['name'])
-    
+
     def test_422_unprocessable_update_actor_with_wrong_attributes(self):
         res = self.client().patch(
             '/actors/1',
-            json=self.actor_with_wrong_attributes, 
+            json=self.actor_with_wrong_attributes,
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
@@ -183,7 +194,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['deleted_id'])
-    
+
     def test_404_not_found_actor_to_delete(self):
         res = self.client().delete(
             '/actors/99999',
@@ -202,7 +213,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_get_list_of_movies(self):
         res = self.client().get(
-            '/movies', 
+            '/movies',
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
@@ -212,54 +223,54 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_get_movie_information(self):
         res = self.client().get(
-            '/movies/1', 
+            '/movies/1',
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['movie'])
-    
+
     def test_404_movie_not_found(self):
         res = self.client().get(
-            '/movies/99999', 
+            '/movies/99999',
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Not Found')
-    
+
     # Post Movie
 
     def test_create_new_movie(self):
         res = self.client().post(
             '/movies',
-            json=self.movie_test, 
+            json=self.movie_test,
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['created_id'])
-    
+
     def test_400_bad_request_create_new_movie_with_missing_attributes(self):
         res = self.client().post(
             '/movies',
-            json=self.movie_with_missing_attributes, 
+            json=self.movie_with_missing_attributes,
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
         self.assertEqual(res.status_code, 400)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Bad Request')
-    
+
     # Patch Movie
 
     def test_update_movie_information(self):
         res = self.client().patch(
             '/movies/1',
-            json=self.movie_test, 
+            json=self.movie_test,
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
@@ -267,11 +278,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['movie'])
         self.assertEqual(data['movie']['title'], self.movie_test['title'])
-    
+
     def test_422_unprocessable_update_movie_with_wrong_attributes(self):
         res = self.client().patch(
             '/movies/1',
-            json=self.movie_with_wrong_attributes, 
+            json=self.movie_with_wrong_attributes,
             headers=self.default_token_auth)
         data = json.loads(res.data.decode('utf-8'))
 
@@ -290,7 +301,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['deleted_id'])
-    
+
     def test_404_not_found_movie_to_delete(self):
         res = self.client().delete(
             '/movies/99999',
@@ -307,10 +318,10 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     # Casting Assistant
 
-    ## get:actors - success
+    # get:actors - success
     def test_casting_assistant_get_list_of_actors(self):
         res = self.client().get(
-            '/actors', 
+            '/actors',
             headers=self.token_auth['casting_assistant_auth'])
         data = json.loads(res.data.decode('utf-8'))
 
@@ -318,11 +329,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(len(data['actors']))
 
-    ## post:actors - forbidden
+    # post:actors - forbidden
     def test_403_forbidden_casting_assistant_create_new_actor(self):
         res = self.client().post(
             '/actors',
-            json=self.actor_test, 
+            json=self.actor_test,
             headers=self.token_auth['casting_assistant_auth'])
         data = json.loads(res.data.decode('utf-8'))
 
@@ -332,11 +343,11 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     # Casting Director
 
-    ## patch:actors - success
+    # patch:actors - success
     def test_casting_director_update_actor_information(self):
         res = self.client().patch(
             '/actors/3',
-            json=self.actor_test, 
+            json=self.actor_test,
             headers=self.token_auth['casting_director_auth'])
         data = json.loads(res.data.decode('utf-8'))
 
@@ -345,7 +356,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertTrue(data['actor'])
         self.assertEqual(data['actor']['name'], self.actor_test['name'])
 
-    ## post:movies - forbidden
+    # post:movies - forbidden
     def test_403_forbidden_casting_director_create_new_movie(self):
         res = self.client().post(
             '/movies',
@@ -358,11 +369,11 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     # Executive Producer
 
-    ## post:movies - success
+    # post:movies - success
     def test_executive_producer_create_new_movie(self):
         res = self.client().post(
             '/movies',
-            json=self.movie_test, 
+            json=self.movie_test,
             headers=self.token_auth['executive_producer_auth'])
         data = json.loads(res.data.decode('utf-8'))
 
@@ -370,7 +381,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['created_id'])
 
-    ## delete:movies - success
+    # delete:movies - success
     def test_executive_producer_delete_movie(self):
         res = self.client().delete(
             '/movies/3',
