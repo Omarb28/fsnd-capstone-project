@@ -1,4 +1,5 @@
 import os
+import json
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
@@ -21,29 +22,6 @@ def setup_db(app, database_path=database_path):
     return db
 
 
-class Movie(db.Model):
-    '''
-    Movie Model
-    Has attributes title and release year
-    '''
-    __tablename__ = 'Movie'
-
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
-    release_year = Column(Integer)
-
-    def __init__(self, title, release_year):
-        self.title = title
-        self.release_year = release_year
-
-    def format(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            'release_year': self.release_year
-        }
-
-
 class Actor(db.Model):
     '''
     Actor Model
@@ -61,6 +39,17 @@ class Actor(db.Model):
         self.age = age
         self.gender = gender
 
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
     def format(self):
         return {
             'id': self.id,
@@ -68,3 +57,43 @@ class Actor(db.Model):
             'age': self.age,
             'gender': self.gender
         }
+
+    def __repr__(self):
+        return json.dumps(self.format())
+
+
+class Movie(db.Model):
+    '''
+    Movie Model
+    Has attributes title and release year
+    '''
+    __tablename__ = 'Movie'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    release_year = Column(Integer)
+
+    def __init__(self, title, release_year):
+        self.title = title
+        self.release_year = release_year
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'release_year': self.release_year
+        }
+
+    def __repr__(self):
+        return json.dumps(self.format())
