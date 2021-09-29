@@ -1,9 +1,11 @@
-COPY public."Movie" (id, title, release_year) FROM stdin;
-1	Titanic	1997
-2	SAW	2004
+DELETE FROM "Actor";
+DELETE FROM "Movie";
 
+INSERT INTO "Movie" (id, title, release_year) VALUES
+(1, 'Titanic', 1997),
+(2, 'SAW', 2004);
 
-COPY public."Actor" (id, name, age, gender) FROM stdin;
-1	Leonardo DiCaprio	46	Male
-2	Kate Winslet	45	Female
-3	Cary Elwes	58	Male
+INSERT INTO "Actor" (id, name, age, gender) VALUES
+(1, 'Leonardo DiCaprio', 46, 'Male'),
+(2, 'Kate Winslet', 45, 'Female'),
+(3, 'Cary Elwes', 58, 'Male');
