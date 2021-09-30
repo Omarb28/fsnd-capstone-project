@@ -1,3 +1,7 @@
+export FLASK_APP="src/app.py"
+export FLASK_ENV="development"
+export FLASK_DEBUG=1
+export DATABASE_URL="postgresql://omar:password@localhost:5432/casting-agency"
 export AUTH0_DOMAIN="omar-fsnd.us.auth0.com"
 export AUTH_ALGORITHMS="RS256"
 export API_AUDIENCE="casting-agency"
