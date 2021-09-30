@@ -39,27 +39,27 @@ def create_app(test_config=None):
     @app.route('/actors', methods=['POST'])
     @requires_auth('post:actors')
     def create_actor(jwt):
-        body = request.get_json()
-
-        name = body.get('name')
-        age = body.get('age')
-        gender = body.get('gender')
-
-        if (
-            type(name) is not str
-            or type(age) is not int
-            or type(gender) is not str
-        ):
-            abort(400)
-
-        if (
-            name == ''
-            or age <= 0
-            or (gender != 'Male' and gender != 'Female')
-        ):
-            abort(422)
-
         try:
+            body = request.get_json()
+
+            name = body.get('name')
+            age = int(body.get('age'))
+            gender = body.get('gender')
+
+            if (
+                type(name) is not str
+                or type(age) is not int
+                or type(gender) is not str
+            ):
+                abort(400)
+
+            if (
+                name == ''
+                or age <= 0
+                or (gender != 'Male' and gender != 'Female')
+            ):
+                abort(422)
+        
             actor = Actor(name=name, age=age, gender=gender)
             actor.insert()
 
@@ -69,7 +69,9 @@ def create_app(test_config=None):
                 "created_id": actor.id
             })
         except exc.SQLAlchemyError:
-            abort(400)
+            abort(400, description="Bad Request. SQLAlchemy Error.")
+        except ValueError:
+            abort(400, description="Bad Request. ValueError")
 
     # Retrive Actor
     @app.route('/actors/<int:actor_id>', methods=['GET'])
@@ -180,24 +182,24 @@ def create_app(test_config=None):
     @app.route('/movies', methods=['POST'])
     @requires_auth('post:movies')
     def create_movie(jwt):
-        body = request.get_json()
-
-        title = body.get('title')
-        release_year = body.get('release_year')
-
-        if (
-            type(title) is not str
-            or type(release_year) is not int
-        ):
-            abort(400)
-
-        if (
-            title == ''
-            or release_year <= 0
-        ):
-            abort(422)
-
         try:
+            body = request.get_json()
+
+            title = body.get('title')
+            release_year = int(body.get('release_year'))
+
+            if (
+                type(title) is not str
+                or type(release_year) is not int
+            ):
+                abort(400)
+
+            if (
+                title == ''
+                or release_year <= 0
+            ):
+                abort(422)
+
             movie = Movie(title=title, release_year=release_year)
             movie.insert()
 
@@ -207,7 +209,9 @@ def create_app(test_config=None):
                 "created_id": movie.id
             })
         except exc.SQLAlchemyError:
-            abort(400)
+            abort(400, description="Bad Request. SQLAlchemy Error.")
+        except ValueError:
+            abort(400, description="Bad Request. ValueError")
 
     # Retrieve Movie
     @app.route('/movies/<int:movie_id>', methods=['GET'])
