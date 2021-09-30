@@ -35,6 +35,13 @@ To host the project locally you can do the following:
 1. Then the model changes can be migrated with the following command `flask db upgrade` after changing the working directory to `src` folder with the command `cd src`.
 1. Finally the flask API can be run with the command `flask run --host=0.0.0.0 --port=5000`.
 
+### Authentication Setup
+Tokens are provided for each role with long expiry time in the `setup.sh` file.  
+If it is required to setup your own JWT tokens you may do the following:  
+1. Login to the following link through Auth0: https://omar-fsnd.us.auth0.com/authorize?audience=casting-agency&response_type=token&client_id=fYvohdJbrufgAsotomj0G7hcuos8f7FK&redirect_uri=https://omar-fsnd-casting-agency.herokuapp.com/
+1. After logging it will redirect you to a page. You can find your JWT token in the URL in your browser after the `access_token=` attribute.
+1. The JWT token can then be used to request from the API endpoints using the Authorization header with `Bearer <jwt-token>` included.
+
 ### Testing
 For testing there are two ways included. First one is through Unittest library. Second one is through Postman Collection.   
 
@@ -188,4 +195,5 @@ The permissions provided are as follows:
   * `delete:movies`
 
 ## Conclusion
-Thank you for reviewing my project. I hope that all the requirements are fulfilled.
+Thank you for reviewing my project. I hope that all the requirements are fulfilled.  
+The project includes MIT License.
