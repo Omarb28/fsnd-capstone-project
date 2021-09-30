@@ -33,7 +33,8 @@ To host the project locally you can do the following:
 1. Source the environment variables found in `setup.sh` using the command `source setup.sh`
 1. Make sure that the environmental variable `DATABASE_URL` contains the correct username and password for your postgresql installation.
 1. Then the model changes can be migrated with the following command `flask db upgrade` after changing the working directory to `src` folder with the command `cd src`.
-1. Finally the flask API can be run with the command `flask run --host=0.0.0.0 --port=5000`.
+2. After that, you can seed data into the database by going to the folder `src/database/` and then using the command `psql casting-agency < movie_data_seed.psql`.
+3. Finally the flask API can be run with the command `flask run --host=0.0.0.0 --port=5000`.
 
 ### Authentication Setup
 Tokens are provided for each role with long expiry time in the `setup.sh` file.  
