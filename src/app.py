@@ -16,6 +16,13 @@ def create_app(test_config=None):
     db = setup_db(app)
     migrate = Migrate(app, db)
 
+    # Welcome Endpoint
+    @app.route('/')
+    def welcome_endpoint():
+        return jsonify({
+            "message": "Welcome to Casting Agency API. Please use the endpoints /actors & /movies with an authorized JWT token to begin using the API. Thank you!"
+        })
+
     '''
     Actor Endpoints
     '''
