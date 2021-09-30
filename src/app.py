@@ -68,8 +68,8 @@ def create_app(test_config=None):
                 "status_code": 200,
                 "created_id": actor.id
             })
-        #except exc.SQLAlchemyError:
-        #    abort(400, description="Bad Request. SQLAlchemy Error.")
+        except exc.SQLAlchemyError:
+            abort(400, description="Bad Request. SQLAlchemy Error.")
         except ValueError:
             abort(400, description="Bad Request. ValueError")
 
@@ -208,8 +208,8 @@ def create_app(test_config=None):
                 "status_code": 200,
                 "created_id": movie.id
             })
-        #except exc.SQLAlchemyError:
-        #    abort(400, description="Bad Request. SQLAlchemy Error.")
+        except exc.SQLAlchemyError:
+            abort(400, description="Bad Request. SQLAlchemy Error.")
         except ValueError:
             abort(400, description="Bad Request. ValueError")
 
